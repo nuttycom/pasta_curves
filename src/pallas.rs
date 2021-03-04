@@ -131,6 +131,7 @@ fn test_map_to_curve_simple_swu() {
     );
 }
 
+#[cfg(feature = "alloc")]
 #[test]
 fn test_hash_to_curve() {
     use crate::arithmetic::CurveExt;

@@ -1,5 +1,6 @@
 //! Implementation of the Pallas / Vesta curve cycle.
 
+#![no_std]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(unknown_lints)]
 #![allow(
@@ -16,6 +17,13 @@
 #![deny(missing_debug_implementations)]
 #![deny(missing_docs)]
 #![deny(unsafe_code)]
+
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
+#[cfg(any(feature = "std", test))]
+#[macro_use]
+extern crate std;
 
 #[macro_use]
 mod macros;

@@ -3,11 +3,16 @@
 
 use core::cmp;
 use core::ops::{Add, Mul, Sub};
+
+#[cfg(feature = "alloc")]
+use alloc::boxed::Box;
+
 use group::prime::{PrimeCurve, PrimeCurveAffine};
 use subtle::{Choice, ConditionallySelectable, ConstantTimeEq, CtOption};
 
 use super::{FieldExt, Group};
 
+#[cfg(feature = "std")]
 use std::io::{self, Read, Write};
 
 /// This trait is a common interface for dealing with elements of an elliptic
@@ -62,6 +67,7 @@ pub trait CurveExt:
     ///     (g * x + &(h * r)).to_affine()
     /// }
     /// ```
+    #[cfg(feature = "alloc")]
     fn hash_to_curve<'a>(domain_prefix: &'a str) -> Box<dyn Fn(&[u8]) -> Self + 'a>;
 
     /// Returns whether or not this element is on the curve; should
@@ -112,6 +118,7 @@ pub trait CurveAffine:
 
     /// Reads a compressed element from the buffer and attempts to parse it
     /// using `from_bytes`.
+    #[cfg(feature = "std")]
     fn read<R: Read>(reader: &mut R) -> io::Result<Self> {
         let mut compressed = Self::Repr::default();
         reader.read_exact(compressed.as_mut())?;
@@ -120,6 +127,7 @@ pub trait CurveAffine:
     }
 
     /// Writes an element in compressed form to the buffer.
+    #[cfg(feature = "std")]
     fn write<W: Write>(&self, writer: &mut W) -> io::Result<()> {
         let compressed = self.to_bytes();
         writer.write_all(compressed.as_ref())
